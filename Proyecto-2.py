@@ -8,6 +8,7 @@ alto_biblioteca = 0
 mapa = 0
 indice_piso = 0
 indice_biblioteca = 0
+resultado_dado = 0
 
 def introduccion():
     print("\n\nEres una nina en el ano 5284. Vas camino a tu casa y miras por la ventana mientras \n\n"
@@ -82,7 +83,16 @@ def genrador_alzar_de_juego():
     largo_piso = random.randint(5, dificultad_piso)
     alto_biblioteca = random.randint(5, dificultad_biblioteca)
     mapa = creador_de_mapa(largo_piso, largo_piso, alto_biblioteca, alto_biblioteca)
-    juego(1)
+
+    print("\nAhora al frente de ti hay un libro de", alto_biblioteca, "capitulos\n"
+    "de", largo_piso, " paginas cada capitulo, al final de cada capitulo habra un formulario\n"
+    "tienes prisa porlotanto decides leer algunas paginas y verificar si aprendiste lo nesesario realizando el cuestionario\n"
+    "escoges las paginas que leeras tirando un dado de 4 caras donde las opciones pueden ser 1, 2, 3 y 4\n"
+    "porlotanto debes tirar los dados (con tirar_dado) para saber que pagina leer\n"
+    "si escribes (info) te apareseran todos los comandos para jugar mas fuido\n"
+    "y con (stats) tu situacion en la historia por que capitulo vas en que pagina etc\n")
+
+    juego()
 
 def creador_de_mapa(largo, stopl, stopa, alto):
     piso = creador_de_piso(largo, stopl)
@@ -104,12 +114,12 @@ def creador_de_piso(largo, stopl):
 def dificultad():
     global dificultad_piso
     global dificultad_biblioteca
-    print("--- VAMOS A VER QUE TAN CURIOSO ERES---")
-    print("1. Mucho texto dame algo corto")
-    print("2. Me interasa pero quiero una experiencia casual")
-    print("3. Tengo curosidad y quiero aprender del tema")
-    print("4. Quieres leer todo el libro y aprender del sistema de esta segunda sociedad")
-    SE = input("Selecciona que tanta curiosidad tienes para leer el libro: ")
+    print("--- VAMOS A VER QUE TAN CURIOSO ERES---\n")
+    print("1. Mucho texto dame algo corto\n")
+    print("2. Me interasa pero quiero una experiencia casual\n")
+    print("3. Tengo curosidad y quiero aprender del tema\n")
+    print("4. Quieres leer todo el libro y aprender del sistema de esta segunda sociedad\n")
+    SE = input("Selecciona que tanta curiosidad tienes para leer el libro: \n")
     ME = int(SE)
 
     if ME == 1:
@@ -141,7 +151,7 @@ def creditos():
     print("By CodeGaming")
     menu1()
         
-def juego(intro = 0):
+def juego():
     global mapa
     global indice_piso
     global indice_biblioteca
@@ -149,21 +159,35 @@ def juego(intro = 0):
     global dificultad_biblioteca
     global largo_piso
     global alto_biblioteca
-    if intro == 1:
-        print("Ahora al frente de ti hay un libro de", alto_biblioteca, "capitulos")
-        print("de", largo_piso, " paginas cada capitulo, al final de cada capitulo habra un formulario")
-        print("tienes prisa porlotanto decides leer algunas paginas y verificar si aprendiste lo nesesario realizando el cuestionario")
-        print("escoges las paginas que leeras tirando un dado de 4 caras donde las opciones pueden ser 1, 2, 3 y 4")
-        print("porlotanto debes tirar los dados (con t.tirar dados) para saber que pagina leer")
-        print("si escribes (info) te apareseran todos los comandos para jugar mas fuido")
-        print("y con (stats) tu situacion en la historia por que capitulo vas en que pagina etc")
+    global resultado_dado
+    TD = input()
+    if TD == "tirar_dado":
+        resultado_dado = dado()
+        indice_piso += resultado_dado
+        while True:
+            if indice_piso == largo_piso - 1:
+                print("estas en el capitulo", indice_biblioteca, "en la pagina", indice_piso, "pues te salio", resultado_dado, "y por lo tanto vas al cuestionario")
+                pistas()
+                break
+            elif indice_piso == largo_piso:
+                    indice_piso = largo_piso-1
+            elif indice_piso > largo_piso:
+                    indice_piso = largo_piso-1
+            else:
+                break
+                
+        print(mapa)
+        print("estas en el capitulo", indice_biblioteca, "en la pagina", indice_piso, "pues te salio", resultado_dado)
         juego()
-
-    elif intro == 0:
-        TD = input()
-        if TD == "t.tirar dados":
-            largo_piso + dado()
             
+def pistas():
+    global indice_piso
+    global indice_biblioteca
+    
+    print("que rico kaleb")
+    indice_piso = 0
+    indice_biblioteca += 1
+    juego()
 
 
 def que_esta_pasando():
@@ -188,9 +212,8 @@ def dado():
     TD = random.randint(1, 4)
     return TD
 
-
-# introduccion()
-# menu()
+introduccion()
+menu()
 # while True:
 
 #     print(num)
@@ -198,3 +221,4 @@ def dado():
 #         num = 0 
 #     else:
 #         num += 1
+
