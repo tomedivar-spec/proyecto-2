@@ -160,92 +160,61 @@ def juego():
     global largo_piso
     global alto_biblioteca
     global resultado_dado
+
     TD = input()
+
     if TD == "tirar_dado":
+
         resultado_dado = dado()
         indice_piso += resultado_dado
         while True:
-            if indice_piso == largo_piso - 1:
-                print("estas en el capitulo", indice_biblioteca, "en la pagina", indice_piso, "pues te salio", resultado_dado, "y por lo tanto vas al cuestionario")
-                break
-            elif indice_piso == largo_piso:
-                    indice_piso = largo_piso-1
-            elif indice_piso > largo_piso:
-                    indice_piso = largo_piso-1
-            else:
-                break
-                
+            if indice_piso == largo_piso - 1 or indice_piso > largo_piso:
+                cuestionario(indice_biblioteca)
+                if cuestionario(indice_biblioteca) == True:
+                    print("exelente buen trabajo")
+                    indice_biblioteca += 1
+                    indice_piso = 0
+                    juego()
+                    break
+                elif cuestionario(indice_biblioteca) == False:
+                    if indice_biblioteca - 1 < 0:
+                        indice_biblioteca = 0
+                        indice_piso = 0
+                        juego()
+                    elif indice_biblioteca - 1 > 0:
+                        indice_biblioteca -= 1
+                        indice_piso = 0
+                        juego()
+                        break
+                    else:
+                        temas()
+                        break
+
         print(mapa)
         print("estas en el capitulo", indice_biblioteca, "en la pagina", indice_piso, "pues te salio", resultado_dado)
         temas()
         juego()
             
-def selector_de_pistas():
-    global indice_piso
-    global indice_biblioteca
-    if indice_biblioteca == 0:
-        print("tema numero 0")
-        temas(0)
-    if indice_biblioteca == 1:
-        print("tema numero 1")
-        temas(1)
-    if indice_biblioteca == 2:
-        print("tema numero 2")
-        temas(2)
-    if indice_biblioteca == 3:
-        print("tema numero 3")
-        temas(3)
-    if indice_biblioteca == 4:
-        print("tema numero 4")
-        temas(4)
-    if indice_biblioteca == 5:
-        print("tema numero 5")
-        temas(5)
-    if indice_biblioteca == 6:
-        print("tema numero 6")
-        temas(6)
-    if indice_biblioteca == 7:
-        print("tema numero 7")
-        temas(7)
-    if indice_biblioteca == 8:
-        print("tema numero 8")
-        temas(8)
-    if indice_biblioteca == 9:
-        print("tema numero 9")
-        temas(9)
-    if indice_biblioteca == 10:
-        print("tema numero 10")
-        temas(10)
-    if indice_biblioteca == 11:
-        print("tema numero 11")
-        temas(11)
-    if indice_biblioteca == 12:
-        print("tema numero 12")
-        temas(12)
-    if indice_biblioteca == 13:
-        print("tema numero 13")
-        temas(13)
-    if indice_biblioteca == 14:
-        print("tema numero 14")
-        temas(14)
-    if indice_biblioteca == 15:
-        print("tema numero 15")
-        temas(15)
-    # print("que rico kaleb")
-    # indice_piso = 0
-    # indice_biblioteca += 1
-    # juego()
 def temas():
     global indice_piso
     global indice_biblioteca
 
-    print(indice_piso)
-
     TE = random.randint(1, 15)
-    pistas = [[["Pista1 piso0"], ["pista2 piso0"], ["pista3 piso0"], ["pista4 piso0"], ["pista5 piso0"]], [["pista1 piso1"], ["pista2 piso2"], ["pista3 piso3"], 
-["pista4 piso 2"], ["pista5 psio2"]], [["pista1 piso3"], ["pista2 piso3"], ["pista3 piso3"], ["pista4 piso3"], ["pista5 piso3"]], [["pista1 piso4"], ["pista2 piso4"], 
-["pista3 piso4"], ["pista4 piso4"], ["pistas5 piso4"]], [["pista1 piso5"], ["pista2 piso5"], ["pista3 piso5"], ["pista4 piso5"], ["pista5 piso5"]]]
+
+    pistas = [[["Pista1 piso0"], ["pista2 piso0"], ["pista3 piso0"], ["pista4 piso0"], ["pista5 piso0"]], [["pista1 piso1"], ["pista2 piso1"], ["pista3 piso1"], 
+["pista4 piso1"], ["pista5 psio1"]], [["pista1 piso2"], ["pista2 piso2"], ["pista3 piso2"], ["pista4 piso2"], ["pista5 piso2"]], [["pista1 piso3"], ["pista2 piso3"], 
+["pista3 piso3"], ["pista4 piso3"], ["pistas5 piso3"]], [["pista1 piso4"], ["pista2 piso4"], ["pista3 piso4"], ["pista4 piso4"], ["pista5 piso4"]], [["pista1 piso5"], 
+["pista2 piso5"], ["pista3 piso5"], ["pista4 piso5"], ["pista5 piso5"]]]
     print(pistas[indice_biblioteca][indice_piso - 1])
+    juego()
+
+def cuestionario(indice):
+    if indice == 0:
+        res = input("te sabes la respuesta?: ") 
+        if res == "si":
+            return True
+        elif res == "no":
+            return False
 
 
 def que_esta_pasando():
