@@ -3,7 +3,8 @@
   POST SOCIETY PUNK
   Taller de Programación - Biblioteca Anarquista
   Juego de terminal
-  Kaleb C
+  Kaleb Coto
+  Tomás André 
 =============================================================
 """
  
@@ -999,7 +1000,7 @@ def inicializar_partida():
     print("de " + str(largo_piso) + " paginas cada capitulo. Al final de cada capitulo habra un formulario.")
     print("Tienes prisa, por lo tanto decides leer algunas paginas y verificar si aprendiste")
     print("lo necesario realizando el cuestionario.")
-    print("Escoges las paginas que leeras tirando un dado de 4 caras (1, 2, 3 o 4).")
+    print("Escoges las paginas que leeras tirando un dado de 4 caras (0, 1, 2 o 3).")
     print("Escribe 'info' para ver todos los comandos o 'stats' para ver tu progreso.\n")
 
     juego()
@@ -1132,9 +1133,9 @@ def mostrar_capsulas():
 
 def cuestionario():
     """
-    Hace hasta 7 preguntas del capítulo actual.
-    - Si el jugador acumula 4 respuestas correctas: gana.
-    - Si acumula 4 incorrectas: pierde.
+    Hace hasta 5 preguntas del capítulo actual.
+    - Si el jugador acumula 5 respuestas correctas: gana.
+    - Si acumula 1 incorrectas: pierde.
     """
     global indice_biblioteca
 
@@ -1147,17 +1148,20 @@ def cuestionario():
     print("7 preguntas. 4 correctas para avanzar, 4 incorrectas para retroceder.")
     print("Escribe 'capsula' en cualquier momento para recibir una ayuda.\n")
 
-    while numero < 7:
+    while numero < 5:
 
-        pregunta = cuestionarios[indice_biblioteca][numero][0]
+        pregunta = PREGUNTAS[indice_biblioteca][numero]
         ayuda = cuestionarios[indice_biblioteca][numero][1]
-        respuesta = cuestionarios[indice_biblioteca][numero][2]
+        respuesta = RESPUESTAS[indice_biblioteca][numero]
+        opciones0 = OPCIONES[indice_biblioteca][numero][0]
+        opciones1 = OPCIONES[indice_biblioteca][numero][1]
+        opciones2 = OPCIONES[indice_biblioteca][numero][2]
 
         print("Pregunta " + str(numero + 1) +
-              "/7  |  Correctas: " + str(correctas) +
+              "/5  |  Correctas: " + str(correctas) +
               "  Incorrectas: " + str(incorrectas))
 
-        print(pregunta)
+        print(pregunta + "\n" + opciones0 + "\n" + opciones1 + "\n" + opciones2)
 
         while True:
 
@@ -1177,13 +1181,13 @@ def cuestionario():
                       " (" + str(incorrectas) + " malas)\n")
                 break
 
-        if correctas >= 4:
+        if correctas >= 5:
             print("Superaste el cuestionario con " +
                   str(correctas) +
                   " correctas. Avanzas al siguiente capítulo.\n")
             return True
 
-        if incorrectas >= 4:
+        if incorrectas >= 5:
             print("Demasiados errores (" +
                   str(incorrectas) +
                   " incorrectas). Vuelves a repasar.\n")
@@ -1209,7 +1213,7 @@ def cuestionario():
 
 def dado():
     """Simula el lanzamiento de un dado de 4 caras. Devuelve un entero entre 1 y 4."""
-    return random.randint(1, 4)
+    return random.randint(0, 3)
 
 # ---------------------------------------------------------------------------
 # UTILIDAD DE DEPURACION (no se usa en el flujo normal del juego)
