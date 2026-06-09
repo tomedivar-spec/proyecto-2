@@ -1037,7 +1037,7 @@ def juego():
             if indice_piso >= largo_piso:
                 # Jugador llego al final del capitulo
                 indice_piso = largo_piso - 1
-                mostrar_pista()
+                mostrar_capsulas()
                 print("Llegaste al final del capitulo " + str(indice_biblioteca + 1) + ".")
 
                 if cuestionario():
@@ -1061,7 +1061,7 @@ def juego():
                         print("Estas en el primer capitulo. Repasas desde el principio.\n")
                     indice_piso = 0
             else:
-                mostrar_pista()
+                mostrar_capsulas()
 
         else:
             print("Comando '" + cmd + "' desconocido. Escribe 'info' para ayuda.")
@@ -1098,88 +1098,114 @@ def mostrar_stats():
     print("Ultimo dado: " + str(resultado_dado) + "\n")
 
 
-def mostrar_pista():
+def mostrar_capsulas():
     """
-    Tira el dado de 4 caras y muestra esa cantidad de pistas del capitulo actual.
-    Las pistas se toman desde la pagina actual hacia adelante sin salirse del rango.
+    Tira el dado de 4 caras y muestra esa cantidad de cápsulas del capítulo actual.
+    Las cápsulas se toman desde la página actual hacia adelante sin salirse del rango.
     """
     global indice_piso, indice_biblioteca
 
-    tiro         = dado()
-    total_pistas = len(pistas[indice_biblioteca])
+    tiro = dado()
+    total_capsulas = len(CAPSULAS[indice_biblioteca])
 
-    print("\n  [Capitulo " + str(indice_biblioteca + 1) + " - " + titulos_capitulos[indice_biblioteca] + "]")
-    print("  Tiraste el dado y sacaste " + str(tiro) + ". Lees " + str(tiro) + " pista(s):\n")
+    print("\n  [Capitulo " + str(indice_biblioteca + 1) + " - " +
+          titulos_capitulos[indice_biblioteca] + "]")
 
-    pistas_mostradas = 0
-    while pistas_mostradas < tiro:
-        idx = indice_piso + pistas_mostradas
-        if idx >= total_pistas:
-            idx = total_pistas - 1
-        print("  - Pista " + str(pistas_mostradas + 1) + ": " + pistas[indice_biblioteca][idx])
-        pistas_mostradas += 1
+    print("  Tiraste el dado y sacaste " + str(tiro) +
+          ". Lees " + str(tiro) + " cápsula(s):\n")
+
+    capsulas_mostradas = 0
+
+    while capsulas_mostradas < tiro:
+        idx = indice_piso + capsulas_mostradas
+
+        if idx >= total_capsulas:
+            idx = total_capsulas - 1
+
+        print("  - Cápsula " + str(capsulas_mostradas + 1) +
+              ": " + CAPSULAS[indice_biblioteca][idx])
+
+        capsulas_mostradas += 1
 
     print("")
 
 
 def cuestionario():
     """
-    Hace hasta 7 preguntas del capitulo actual.
-    - Si el jugador acumula 4 respuestas correctas: gana el cuestionario (True).
-    - Si el jugador acumula 4 respuestas incorrectas: pierde el cuestionario (False).
-    El cuestionario termina en cuanto se alcanza cualquiera de los dos limites.
+    Hace hasta 7 preguntas del capítulo actual.
+    - Si el jugador acumula 4 respuestas correctas: gana.
+    - Si acumula 4 incorrectas: pierde.
     """
     global indice_biblioteca
 
-    correctas   = 0
+    correctas = 0
     incorrectas = 0
-    numero      = 0
+    numero = 0
 
-    print("\n=== CUESTIONARIO - Capitulo " + str(indice_biblioteca + 1) + " ===")
+    print("\n=== CUESTIONARIO - Capitulo " +
+          str(indice_biblioteca + 1) + " ===")
     print("7 preguntas. 4 correctas para avanzar, 4 incorrectas para retroceder.")
-    print("Escribe 'pista' en cualquier momento para recibir una ayuda.\n")
+    print("Escribe 'capsula' en cualquier momento para recibir una ayuda.\n")
 
     while numero < 7:
-        pregunta  = cuestionarios[indice_biblioteca][numero][0]
-        pista     = cuestionarios[indice_biblioteca][numero][1]
+
+        pregunta = cuestionarios[indice_biblioteca][numero][0]
+        ayuda = cuestionarios[indice_biblioteca][numero][1]
         respuesta = cuestionarios[indice_biblioteca][numero][2]
 
-        print("Pregunta " + str(numero + 1) + "/7  |  Correctas: " + str(correctas) + "  Incorrectas: " + str(incorrectas))
+        print("Pregunta " + str(numero + 1) +
+              "/7  |  Correctas: " + str(correctas) +
+              "  Incorrectas: " + str(incorrectas))
+
         print(pregunta)
 
         while True:
+
             entrada = input("Tu respuesta: ").strip().lower()
 
-            if entrada == "pista":
-                print("Pista: " + pista + "\n")
+            if entrada == "capsula":
+                print("Cápsula de ayuda: " + ayuda + "\n")
+
             elif entrada == respuesta.lower():
                 correctas += 1
                 print("Correcto! (" + str(correctas) + " buenas)\n")
                 break
+
             else:
                 incorrectas += 1
-                print("Incorrecto. Era: " + respuesta + " (" + str(incorrectas) + " malas)\n")
+                print("Incorrecto. Era: " + respuesta +
+                      " (" + str(incorrectas) + " malas)\n")
                 break
 
         if correctas >= 4:
-            print("Superaste el cuestionario con " + str(correctas) + " correctas. Avanzas al siguiente capitulo.\n")
+            print("Superaste el cuestionario con " +
+                  str(correctas) +
+                  " correctas. Avanzas al siguiente capítulo.\n")
             return True
 
         if incorrectas >= 4:
-            print("Demasiados errores (" + str(incorrectas) + " incorrectas). Vuelves a repasar.\n")
+            print("Demasiados errores (" +
+                  str(incorrectas) +
+                  " incorrectas). Vuelves a repasar.\n")
             return False
 
         numero += 1
 
-    # Se terminaron las 7 preguntas sin llegar a 4 de ninguna clase
-    # Gana quien tenga mas (en empate, se considera perdido)
     if correctas > incorrectas:
-        print("Fin del cuestionario. " + str(correctas) + " correctas vs " + str(incorrectas) + " incorrectas. Avanzas!\n")
+        print("Fin del cuestionario. " +
+              str(correctas) +
+              " correctas vs " +
+              str(incorrectas) +
+              " incorrectas. Avanzas!\n")
         return True
-    else:
-        print("Fin del cuestionario. " + str(correctas) + " correctas vs " + str(incorrectas) + " incorrectas. Vuelves a repasar.\n")
-        return False
 
+    print("Fin del cuestionario. " +
+          str(correctas) +
+          " correctas vs " +
+          str(incorrectas) +
+          " incorrectas. Vuelves a repasar.\n")
+
+    return False
 
 def dado():
     """Simula el lanzamiento de un dado de 4 caras. Devuelve un entero entre 1 y 4."""
